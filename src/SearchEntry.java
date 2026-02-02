@@ -4,7 +4,7 @@ public class SearchEntry {
     private String keyword;
     private Instant time;
 
-    public void SearchEntry(String keyword){
+    public SearchEntry(String keyword){
         this.time = Instant.now();
         this.keyword = keyword;
     }

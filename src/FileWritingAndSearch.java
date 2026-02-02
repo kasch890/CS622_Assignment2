@@ -2,8 +2,6 @@ import java.io.*;
 import java.util.*;
 
 public class FileWritingAndSearch {
-    private ArrayDeque history;
-
     public static File mergeFiles(String path1, String path2) throws IOException {
         /*This method takes two paths as strings to csv files that you wish to merge and
         * returns one large csv file with file 2 added to the end of file 1*/
@@ -177,25 +175,39 @@ public class FileWritingAndSearch {
     }
 
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
         String path1 = "C:\\Users\\kaife\\Dataforclass\\Indiegogo.csv";
         String path2 = "C:\\Users\\kaife\\Dataforclass\\Indiegogo2.csv";
-
+        SearchHistory history = new SearchHistory();
         try {
             File masterFile = mergeFiles(path1, path2);
 
             // Create the map of campaigns
             Map<String, Set<IndiegogoCampaign>> campaignMap = createCampaignMap(masterFile);
 
-            // Hard-coded searches
-            searchCampaignsByKeyword(campaignMap, "Peter");
-            searchCampaignsByKeyword(campaignMap, "red");
-            searchCampaignsByKeyword(campaignMap, "web");
+            // Prompt user input
+            while (true) {
+                System.out.println("Would you like to 'search' keyword in campaign titles or 'print' search history? :");
+                String userChoice = scanner.nextLine();
+                if (userChoice.equalsIgnoreCase("search")){
+                    System.out.println("Enter keyword you would like to search in campaign titles: ");
+                    String userInput = scanner.nextLine();
+                    searchCampaignsByKeyword(campaignMap, userInput);
+                    history.addEntry(userInput);
+                } else if (userChoice.equalsIgnoreCase("print")) {
+                    history.printAllHistory();
+                } else {
+                    System.out.println("Please enter 'search' or 'print'...\n");
+                }
 
+
+            }
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("IO exception caught in main method");
         } catch (Exception e) {
-
             e.printStackTrace();
+            System.out.println("Exception caught in main method");
         }
     }
 }
